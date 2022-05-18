@@ -4,7 +4,7 @@ Repository template for Watson Studio projects with instructions to start your w
 ## Work with Watson Studio and Git Repository
 Watson Studio projects rely on 2 folders (`assets/` and `assettypes/`, for example, the environment definitions are stored there and the UI checks these folders to list available environments) as well as a few entries in `.gitignore` to function. Therefore, when creating a Watson Studio project for a Git repository, if the target Git repository does not contain such information, Watson Studio will write those into the branch you specified (for `.gitignore`, it will add entries if there is an existing one). 
 
-**Notes**:
+**Note**:
 
 - When creating a Watson Studio project with Git repository, make sure you use the **"default"** type of Git integration. Depending on the version of Watson Studio, you may see the following warning. This warning will be removed in a future release. Nothing bad will happen and it can be ignored. The "default" type of Git integration is able to work with a Git repository with existing files.
 ![project-creation-warning](img/1-project-creation-warning.png)
@@ -15,10 +15,8 @@ git config --local user.name <your name>
 git config --local user.email <your email>
 ```
 
-
-
 ### I'm fine with additions
-If you are good with these few additions in your repository, you can simply hook up a new Watson Studio project with your Git repository and do your work. You may any file included in this template. 
+If you are good with these few additions in your repository, you can simply hook up a new Watson Studio project with your Git repository and do your work.
 
 ### I don't want additions
 If the end goal is to have a Git repository that you can release to a broader team, or even to the public (e.g., DeepLIIF), or to work on a forked repo, then you might want to keep this **release repo** as clean as possible, and the presence of Watson-Studio-specific folders may not be preferred.
@@ -38,7 +36,7 @@ git submodule update
 4. Add, commit, and push this submodule to **Watson Studio repo**. A submodule in git is a reference, so the content in the **release repo** will not be duplicated in the **Watson Studio repo**.
 
 #### Steps to use a Watson Studio project (the project has already been created)
-1. Configure Git authorization (only needed for the first time). Submodules do not inherit the authorization config specified by Watson Studio, so you need to configure it every time in a new JupyterLab / Rstudio runtime. It is the same as how you do it on your laptop. For example, you can run the following command to instruct git to remember the credentials you use:
+1. Configure Git authorization (only needed for the first time). Submodules do not inherit the authorization config specified by Watson Studio, so you need to configure it manually. It is the same as how you do it on your laptop. For example, you can run the following command to instruct git to remember the credentials you use:
 ```
 git config --global credential.helper store
 ```
