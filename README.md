@@ -1,72 +1,49 @@
-# watson-studio-template
-Blank repository template for Watson Studio, which can be used to contain one or multiple submodule repos.  
+# Watson Studio Template
+Repository template for Watson Studio projects with instructions to start your work using Watson Studio & Git repositories.  
 
-## Motivation
-Watson Studio requires multiple directories to be saved to a repository, therefore the method described here can be useful for keeping these files out of a main code repository.
+## Work with Watson Studio and Git Repository
+Watson Studio projects rely on 2 folders (`assets/` and `assettypes/`, for example, the environment definitions are stored there and the UI checks these folders to list available environments) as well as a few entries in `.gitignore` to function. Therefore, when creating a Watson Studio project for a Git repository, if the target Git repository does not contain such information, Watson Studio will write those into the branch you specified (for `.gitignore`, it will add entries if there is an existing one). 
 
-## Getting started
+**Notes**:
 
-If a Watson Studio project has already been created, skip this section and move on to the `Configuring existing Watson Studio project` section
+- When creating a Watson Studio project with Git repository, make sure you use the **"default"** type of Git integration. Depending on the version of Watson Studio, you may see the following warning. This warning will be removed in a future release. Nothing bad will happen and it can be ignored. The "default" type of Git integration is able to work with a Git repository with existing files.
+![project-creation-warning](img/1-project-creation-warning.png)
 
-### Creating a new project from this template
-
-1. Use this template to start a new repo that will be used to contain all the Watson Studio files.
-    This repo should be hosted on the same git host as the submodule repo(s).
-2. Create Watson Studio project with Git integration for the newly created **containing repo**.  The access token must be able to authenticate **both** the containing repo and the submodule repo(s)
-3. Launch JupyterLab IDE and open a new terminal session and enter the following commands.
-4. ```
-    git config --global user.name "<your name>"
-    ```
-5. ```
-    git config --global user.email "<your email>"
-    ```
-6. ```
-    git submodule add <containing repo https URL>
-    ```
-7. ```
-    git submodule update
-    ```
-8. Run the credential helper
-    ```
-    ./credential_helper.sh
-    ```
-9. Export your username for the git remote
-    ```
-    export GIT_USER=<your username>
-    ```
-### Verify that git submodules work
+- Watson Studio as of Cloud Pak for Data (CPD) 4.0.5 uses CPD profile for Git. This means the **commit author information** can be wrong, if the account and information on your Git service does not match your CPD profile (e.g., when using Public GitHub and your account there uses a different email address). If this applies to your case, every time in a new JupyterLab / Rstudio environment, re-configure git profile and put the correct information:
 ```
-cd <submodule directory>
-git push 
+git config --local user.name <your name>
+git config --local user.email <your email>
 ```
-Git should not prompt for username and password if configured correctly
-Make sure that `GIT_USER` env variable is correctly set if any errors are thrown.
-
-### Configuring existing Watson Studio project
-
-1. Open project
-2. Follow the Watson Studio prompts to create a new branch
-3. Open JuypterLab IDE
-4. Open a new terminal session
-5. ```
-    git config --global user.name "<your name>"
-    ```
-6. ```
-    git config --global user.email "<your email>"
-7. ```
-    git submodule init
-    ```
-8. ```
-    git submodule update
-    ```
-9. Run the credential helper
-    ```
-    ./credential_helper.sh
-    ```
-10. Export your username for the git remote
-    ```
-    export GIT_USER=<your username>
-    ```
-11. See steps in the previous section to verify that the git submodules work.
 
 
+
+### I'm fine with additions
+If you are good with these few additions in your repository, you can simply hook up a new Watson Studio project with your Git repository and do your work. You may any file included in this template. 
+
+### I don't want additions
+If the end goal is to have a Git repository that you can release to a broader team, or even to the public (e.g., DeepLIIF), or to work on a forked repo, then you might want to keep this **release repo** as clean as possible, and the presence of Watson-Studio-specific folders may not be preferred.
+- For this purpose, it's recommended to have 2 Git repositories:
+  - **release repo**, the clean Git repository only containing the files you want to release
+  - **Watson Studio repo**, a Git repository used to function as the workspace for a Watson Studio project and allows interaction with the release repo by referring to the release repo as a Git **submodule**
+
+#### Steps to create and configure a Watson Studio project
+1. Create a new Watson Studio project and configure it with the **Watson Studio repo** (once it finishes, you shall see Watson-Studio-specific folders and entries added to the Git repo)
+2. Open JupyterLab or Rstudio, the IDE you'd like to use
+3. In terminal, create a submodule pointing to the **release repo** and fetch the latest content:
+```
+git submodule add <git link to the release repo>
+git submodule update
+```
+  - Now, for all the file changes outside of this submodule folder, git commands know they are for the **Watson Studio repo**; for all the file changes inside this submodule folder, git will be able to locate the remote and/or upstream properly and push changes to the **release repo**.
+4. Add, commit, and push this submodule to **Watson Studio repo**. A submodule in git is a reference, so the content in the **release repo** will not be duplicated in the **Watson Studio repo**.
+
+#### Steps to use a Watson Studio project (the project has already been created)
+1. Configure Git authorization (only needed for the first time). Submodules do not inherit the authorization config specified by Watson Studio, so you need to configure it every time in a new JupyterLab / Rstudio runtime. It is the same as how you do it on your laptop. For example, you can run the following command to instruct git to remember the credentials you use:
+```
+git config --global credential.helper store
+```
+2. Initialize the submodule to pull content (only needed for the first time, if you received this submodule by pulling from remote repo). You may be asked for username and password (token), but once you have done it, git should keep the credentials and re-use it for future actions.
+```
+git submodule init
+git submodule update
+```
