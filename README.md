@@ -9,7 +9,7 @@ Watson Studio projects rely on 2 folders (`assets/` and `assettypes/`, for examp
 - When creating a Watson Studio project with Git repository, make sure you use the **"default"** type of Git integration. Depending on the version of Watson Studio, you may see the following warning. This warning will be removed in a future release. Nothing bad will happen and it can be ignored. The "default" type of Git integration is able to work with a Git repository with existing files.
 ![project-creation-warning](img/1-project-creation-warning.png)
 
-- Watson Studio as of Cloud Pak for Data (CPD) 4.0.5 uses CPD profile for Git. This means the **commit author information** can be wrong, if the account and information on your Git service does not match your CPD profile (e.g., when using Public GitHub and your account there uses a different email address). If this applies to your case, every time in a new JupyterLab / Rstudio environment, re-configure git profile and put the correct information:
+- Watson Studio as of Cloud Pak for Data (CPD) 4.0.5 uses CPD profile for Git. This means the **commit author information** can be wrong, if the account and information on your Git service does not match your CPD profile (e.g., when using Public GitHub and your account there uses a different email address). If this applies to your case, re-configure git profile and put the correct information (it's only needed once if you have specified `git config --global credential.helper store`):
 ```
 git config --local user.name <your name>
 git config --local user.email <your email>
